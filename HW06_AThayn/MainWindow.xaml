@@ -4,8 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HW06_AThayn"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Background="Black"
+        Foreground="White"
+        Title="MainWindow" Height="825" Width="1000">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -34,10 +37,16 @@
         <TextBlock Text="{Binding DateSelected}"/>
 
         <!--Calendar Control-->
-        <TextBlock Text="Select a highlighted date below&#x0a; to view an image from that date:"/>
+        <TextBlock Text="Select a date below&#x0a;to view its moon:"
+                   FontSize="22"/>
         <Calendar Grid.Row="1"
+                  DisplayDateStart="1/1/2018"
+                  DisplayDateEnd="12/31/2019"
                   VerticalAlignment="Center"
-                  SelectedDate="{Binding DatesWithImages}"/>
+                  SelectionMode="SingleDate"
+                  SelectedDate="{Binding SelectedDate}">
+        </Calendar>
+        
         <!--Slider to change zoom on image-->
         <Slider Grid.Row="2"
                 Grid.Column="2"
@@ -48,16 +57,17 @@
         
 
         <!--Selected image description-->
-        <TextBlock Grid.Column="1"
+        <TextBlock Grid.Column="2"
                    Text="{Binding SelectedImage.Description}"/>
         
         <!--Image displayed based on selected date-->
         <ScrollViewer Grid.Row="1"
                       Grid.Column="2"
-                      Grid.RowSpan="2"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
-            <Image Source="{Binding ImageFromDateSelected}">
+            <Image Source="{Binding ImageFromDateSelected}"
+                   MaxHeight="800"
+                   MaxWidth="700">
                 <Image.LayoutTransform>
                     <ScaleTransform ScaleX="{Binding ScaleFactor}"
                                     ScaleY="{Binding ScaleFactor}"/>
