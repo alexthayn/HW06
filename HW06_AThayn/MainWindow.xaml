@@ -7,15 +7,15 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Background="Black"
-        Foreground="White"
-        Title="MainWindow" Height="825" Width="1000">
+        Foreground="LightGoldenrodYellow"
+        WindowStartupLocation="CenterScreen"
+        Title="Moon Phase Calendar 2018-2019" Height="1000" Width="1100">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -27,38 +27,53 @@
             ResizeDirection="Columns"
             ResizeBehavior="PreviousAndNext"
             Grid.Column="1"
-            Grid.RowSpan="3"
+            Grid.RowSpan="2"
             VerticalAlignment="Stretch"
             Width="2"
-            Margin="10,0"
+            Margin="10,-10"
+            Background="DimGray"
             Panel.ZIndex="1"/>
 
-        <!--Date selected-->
-        <TextBlock Text="{Binding DateSelected}"/>
+        <StackPanel Grid.Row="1">
+            <!--Calendar Control-->
+            <TextBlock Text="Select a date below"
+                       FontSize="20"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,10"/>
+            
+            <!--Title-->
+            <TextBlock Text="Moon Phase Calendar"
+                   HorizontalAlignment="Center"
+                   FontSize="14"/>
 
-        <!--Calendar Control-->
-        <TextBlock Text="Select a date below&#x0a;to view its moon:"
-                   FontSize="22"/>
-        <Calendar Grid.Row="1"
-                  DisplayDateStart="1/1/2018"
-                  DisplayDateEnd="12/31/2019"
-                  VerticalAlignment="Center"
-                  SelectionMode="SingleDate"
-                  SelectedDate="{Binding SelectedDate}">
-        </Calendar>
-        
-        <!--Slider to change zoom on image-->
-        <Slider Grid.Row="2"
-                Grid.Column="2"
-                Value="{Binding ScaleFactor}"
-                SmallChange="0.1"
-                Maximum="2"
-                Minimum="0"/>
-        
+            <TextBlock Text="(2018 - 2019)"
+                       HorizontalAlignment="Center"
+                       FontSize="10"/>
+
+            <Calendar Margin="0,5" 
+                      Background="LightYellow"
+                      BorderBrush="LightYellow"
+                      FontStyle="Italic"
+                      FontWeight="Bold"
+                      DisplayDateStart="1/1/2018"
+                      DisplayDateEnd="12/31/2019"
+                      VerticalAlignment="Center"
+                      SelectionMode="SingleDate"
+                      SelectedDate="{Binding SelectedDate}"/>
+        </StackPanel>
+
+      
+
+        <!--Date selected-->
+        <TextBlock Grid.Row="2" Text="{Binding SelectedDate}"
+                   HorizontalAlignment="Center"/>
 
         <!--Selected image description-->
         <TextBlock Grid.Column="2"
-                   Text="{Binding SelectedImage.Description}"/>
+                   Text="{Binding Description}"
+                   HorizontalAlignment="Center"
+                   FontSize="24"
+                   FontWeight="Bold"/>
         
         <!--Image displayed based on selected date-->
         <ScrollViewer Grid.Row="1"
@@ -69,10 +84,19 @@
                    MaxHeight="800"
                    MaxWidth="700">
                 <Image.LayoutTransform>
-                    <ScaleTransform ScaleX="{Binding ScaleFactor}"
-                                    ScaleY="{Binding ScaleFactor}"/>
+                    <ScaleTransform ScaleX="{Binding ScaleFactor, Mode=OneWay}"
+                                    ScaleY="{Binding ScaleFactor, Mode=OneWay}"/>
                 </Image.LayoutTransform>
             </Image>
         </ScrollViewer>
+
+        <!--Slider to change zoom on image-->
+        <Slider Grid.Row="2"
+                Grid.Column="2"
+                Margin="150,10,150,0"
+                Value="{Binding ScaleFactor}"
+                SmallChange="0.1"
+                Maximum="2"
+                Minimum="0"/>
     </Grid>
 </Window>

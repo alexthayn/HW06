@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using HW06_AThayn.Model;
 
 namespace HW06_AThayn.ViewModel
@@ -14,7 +9,7 @@ namespace HW06_AThayn.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
         //List of moon phases to add to the calendar
-        ObservableCollection<MoonPhase> MoonPhaseList;
+        public ObservableCollection<MoonPhase> MoonPhaseList;
 
         //Image path that is bound to
         private string _imageFromDateSelected;
@@ -31,8 +26,35 @@ namespace HW06_AThayn.ViewModel
             }
         }
 
-        //All dates with moonphase data
-        Collection<DateTime> MoonPhaseDateTimes;
+        //Image scale factor
+        private double _scaleFactor;
+        public double ScaleFactor
+        {
+            get
+            {
+                return _scaleFactor;
+            }
+            set
+            {
+                _scaleFactor = value;
+                NotifyPropertyChanged(nameof(ScaleFactor));
+            }
+        }
+
+        //Description of selected date
+        private string _description;
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                _description = value;
+                NotifyPropertyChanged(nameof(Description));
+            }
+        }
 
         //Selected Date
         private DateTime _dateTime;
@@ -46,12 +68,9 @@ namespace HW06_AThayn.ViewModel
             {
                 _dateTime = value;
                 NotifyPropertyChanged(nameof(SelectedDate));
-                DisplayMoonImage();
+                DisplayMoonImageAndDescription();
             }
         }
-
-     
-        public Calendar calendar = new Calendar();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -161,34 +180,29 @@ namespace HW06_AThayn.ViewModel
             MoonPhaseList.Add(new MoonPhase(new DateTime(2019, 12,18), "/Images/4.jpg", "Last Quarter"));
             MoonPhaseList.Add(new MoonPhase(new DateTime(2019, 12,26), "/Images/1.jpg", "New Moon"));
 
-            //Default image path
+            SelectedDate = System.DateTime.Today;
+            DisplayMoonImageAndDescription();
             ImageFromDateSelected = "/Images/MoonPhases.jpg";
-
-            MoonPhaseDateTimes = new Collection<DateTime>();
-            //Populate list with dates
-            foreach(MoonPhase m in MoonPhaseList)
-            {
-                MoonPhaseDateTimes.Add(m.PhaseStart);
-            }
-
+            Description = "Moon Phases";
         }
 
-        private void DisplayMoonImage()
-        {
-            ImageFromDateSelected = GetSelectedDateImage();
-            
-        }
-
-        public string GetSelectedDateImage()
+        private void DisplayMoonImageAndDescription()
         {
             //Check is selected dates is in list
-            foreach(MoonPhase m in MoonPhaseList)
+            foreach (MoonPhase m in MoonPhaseList)
             {
                 if (m.PhaseStart >= SelectedDate)
-                    return m.ImagePath;
+                {
+                    ImageFromDateSelected = m.ImagePath;
+                    Description = m.Description;
+                    ScaleFactor = 1;
+                    return;
+                }
+
             }
 
-            return "/Images/MoonPhases.jpg";
+            ImageFromDateSelected = "/Images/MoonPhases.jpg";
+            Description = "Moon Phases";
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
